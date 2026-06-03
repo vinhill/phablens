@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "name": "Phabvanced",
+  "version": "0.1.0",
+  "description": "Enhanced Phabricator code review: permalink comments and line-level review tracking.",
+  "permissions": [
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://phabricator.services.mozilla.com/*"
+      ],
+      "js": [
+        "src/common.js",
+        "src/storage.js",
+        "src/permalinks.js",
+        "src/review-gutter.js",
+        "src/content.js"
+      ],
+      "css": [
+        "src/styles.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "phabvanced@vhilla"
+    }
+  }
+}

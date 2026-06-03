@@ -1,0 +1,185 @@
+/* Feature 1: Comment Permalinks */
+.phabvanced-permalink {
+  display: inline-block;
+  margin-right: 6px;
+  font-size: 0.85em;
+  opacity: 0.4;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.phabvanced-permalink:hover {
+  opacity: 1;
+}
+
+/* Feature 2: Review gutter indicators */
+col.phabvanced-col {
+  width: 14px;
+}
+
+.phabvanced-gutter {
+  width: 14px;
+  min-width: 14px;
+  max-width: 14px;
+  padding: 0 !important;
+  cursor: pointer;
+  user-select: none;
+  border-left: 1px solid #d0d7de !important;
+  background-color: #f0f0f0;
+  position: relative;
+}
+
+.phabvanced-gutter[data-state="reviewed"] {
+  background-color: #2da44e;
+}
+
+.phabvanced-gutter[data-state="flagged"] {
+  background-color: #cf222e;
+}
+
+.phabvanced-gutter:hover {
+  background-color: #c8ccd0;
+}
+
+.phabvanced-gutter[data-state="reviewed"]:hover {
+  background-color: #1a7f37;
+}
+
+.phabvanced-gutter[data-state="flagged"]:hover {
+  background-color: #a40e26;
+}
+
+.phabvanced-gutter.phabvanced-drag-preview {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+}
+
+.phabvanced-gutter[data-has-note]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* File-level buttons */
+.phabvanced-file-btn-group {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.phabvanced-file-btn {
+  all: revert;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  border: 1px solid #d0d7de;
+  border-radius: 3px;
+  background: #f6f8fa;
+  color: #24292f;
+}
+
+.phabvanced-file-btn:hover {
+  background: #e0e3e6;
+}
+
+.phabvanced-file-btn[data-state="reviewed"] {
+  background: #2da44e;
+  color: #fff;
+  border-color: #2da44e;
+}
+
+.phabvanced-file-btn[data-state="reviewed"]:hover {
+  background: #1a7f37;
+}
+
+.phabvanced-file-btn[data-state="flagged"] {
+  background: #cf222e;
+  color: #fff;
+  border-color: #cf222e;
+}
+
+.phabvanced-file-btn[data-state="flagged"]:hover {
+  background: #a40e26;
+}
+
+/* Note popover */
+.phabvanced-note-popover {
+  position: absolute;
+  z-index: 10000;
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.phabvanced-note-popover textarea {
+  font-family: inherit;
+  font-size: 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 6px;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.phabvanced-note-popover .phabvanced-popover-buttons {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.phabvanced-note-popover button {
+  all: revert;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  background: #f6f8fa;
+  color: #24292f;
+}
+
+.phabvanced-note-popover button.phabvanced-btn-delete {
+  background: #cf222e;
+  color: #fff;
+  border-color: #cf222e;
+  margin-right: auto;
+}
+
+.phabvanced-note-popover button.phabvanced-btn-save {
+  background: #2da44e;
+  color: #fff;
+  border-color: #2da44e;
+}
+
+/* Summary badge */
+#phabvanced-summary {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  z-index: 9999;
+  background: #24292f;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
