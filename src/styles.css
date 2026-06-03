@@ -169,6 +169,140 @@ col.phabvanced-col {
   border-color: #2da44e;
 }
 
+/* Feature 3: Annotation mapping gutter */
+col.phabvanced-annot-col {
+  width: 14px;
+}
+
+.phabvanced-annot {
+  width: 14px;
+  min-width: 14px;
+  max-width: 14px;
+  padding: 0 !important;
+  cursor: default;
+  user-select: none;
+  border-left: 1px solid #d0d7de !important;
+  position: relative;
+}
+
+.phabvanced-annot-linked {
+  cursor: pointer;
+}
+
+.phabvanced-annot[data-annot-idx]:hover {
+  filter: brightness(0.8);
+}
+
+.phabvanced-annot-linked::after {
+  content: "\2192";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+#phabvanced-toast {
+  position: fixed;
+  bottom: 48px;
+  right: 12px;
+  z-index: 10000;
+  background: #24292f;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  animation: phabvanced-fade-in 0.2s ease;
+}
+
+@keyframes phabvanced-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Annotation panel (in-page) */
+#phabvanced-annot-panel {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 10001;
+  background: #fff;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  color: #24292f;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 240px;
+}
+
+.phabvanced-annot-panel-status {
+  padding: 4px 8px;
+  background: #f6f8fa;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #57606a;
+}
+
+.phabvanced-annot-panel-error {
+  font-size: 12px;
+  color: #cf222e;
+  min-height: 0;
+}
+
+.phabvanced-annot-panel-error:empty {
+  display: none;
+}
+
+.phabvanced-annot-panel-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.phabvanced-annot-panel-btn {
+  all: revert;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  background: #f6f8fa;
+  color: #24292f;
+}
+
+.phabvanced-annot-panel-btn:hover {
+  background: #e0e3e6;
+}
+
+.phabvanced-annot-panel-btn-load {
+  background: #0969da;
+  color: #fff;
+  border-color: #0969da;
+}
+
+.phabvanced-annot-panel-btn-load:hover {
+  background: #0550ae;
+}
+
+.phabvanced-annot-panel-btn-clear {
+  background: #cf222e;
+  color: #fff;
+  border-color: #cf222e;
+}
+
+.phabvanced-annot-panel-btn-clear:hover {
+  background: #a40e26;
+}
+
 /* Summary badge */
 #phabvanced-summary {
   position: fixed;

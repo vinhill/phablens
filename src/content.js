@@ -20,6 +20,7 @@ function runInjections() {
   _observer.disconnect();
   injectCommentPermalinks();
   injectGutterColumn();
+  injectAnnotationGutter();
   _observer.observe(document.getElementById("differential-review-stage") || document.body, {
     childList: true,
     subtree: true,
@@ -31,6 +32,12 @@ async function init() {
   if (!revisionId) return;
 
   await loadReviewData();
+
+  browser.runtime.onMessage.addListener((message) => {
+    if (message.type === "toggle-annot-panel") {
+      toggleAnnotationPanel();
+    }
+  });
 
   _observer = new MutationObserver(onMutations);
 

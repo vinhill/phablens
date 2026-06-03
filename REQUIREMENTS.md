@@ -24,7 +24,7 @@ Colgroup defines 6 columns: `num | left | num | copy | right | cov`. The `cov` c
 Line number cells have IDs: `C{changesetId}OL{lineNum}` / `C{changesetId}NL{lineNum}`, with `data-n` holding the line number. File path from `[data-sigil="changeset-header-path-name"]`.
 
 ### UX
-- Each code line gets a narrow (6px) gutter cell at the right edge.
+- Each code line gets a narrow (14px) gutter cell at the right edge.
 - Click: cycle null → reviewed (green) → flagged (red) → null.
 - Shift-click: range select from last clicked line.
 - Right-click: note popover.
@@ -58,7 +58,67 @@ Line keys use `{side}:{lineNum}` to distinguish old vs new side in 2-up diffs.
 ### Edge cases
 - Switching diffs (query param change) loads different stored state.
 - Inline comment rows and context/show-more rows get a spacer td but no gutter.
+- Collapsed/deleted files (no code rows visible): gutter injection is deferred until the file is expanded.
 - MutationObserver re-runs injection when Phabricator lazily loads content.
+
+## Feature 3: Annotation Mapping Gutter
+
+Visualize how code maps between files in large refactoring diffs (e.g. JS→C++ port). A JSON mapping file is loaded via an in-page panel (toggled by the toolbar icon); a second gutter column appears with per-annotation color-coded cells.
+
+### Mapping file format
+
+```json
+{
+  "annotations": [
+    {
+      "category": "ported",
+      "group": "Lifecycle & setup",
+      "from": { "file": "old/path.js", "lines": [10, 25], "name": "setup" },
+      "to": { "file": "new/path.cpp", "lines": [42, 57], "name": "Setup" },
+      "comment": "Core logic moved to native impl"
+    }
+  ]
+}
+```
+
+- `category`: one of `ported`, `new`, `inlined`, `removed`, `merged`, `split`.
+- `from` / `to`: optional depending on category. Each has `file` (string), `lines` ([start, end] inclusive). Optional `name` for the function/symbol name.
+- `group`: optional grouping label (e.g. "Lifecycle & setup", "Event listeners").
+- `comment`: optional free-text annotation.
+
+### Categories
+
+| Category | Linked? | Meaning |
+|----------|---------|---------|
+| ported | yes | Code moved from→to with adaptation |
+| new | no | Newly written code |
+| inlined | yes | Code inlined into another location |
+| removed | no | Code deleted, not moved |
+| merged | yes | Multiple sources merged into one |
+| split | yes | One source split into multiple |
+
+Colors are not per-category. Each annotation gets its own color from a 10-color cycling palette (by annotation index), so adjacent blocks of the same category are visually distinct.
+
+### Loading
+
+- Toolbar icon click → background script sends `toggle-annot-panel` message → content script toggles an in-page floating panel with file picker, clear, and close buttons.
+- File reading and validation happen inside the content script (avoids Firefox popup-dies-on-file-picker issue).
+- Annotations stored in memory (session-only, no persistence).
+
+### DOM injection
+
+Same strategy as Feature 2: appends a `<col class="phabvanced-annot-col">` and per-row `<td class="phabvanced-annot">` cells. Annotation matching: `from` side matches old-side lines, `to` side matches new-side lines, by file path and line range.
+
+### UX
+
+- Hover: native tooltip shows `#index — category — comment`.
+- Click (linked categories): scrolls to the counterpart file/line in the diff. Toast if target not visible.
+- Clear: removes all annotation gutter cells and columns.
+- Collapsed files: gutter injection is deferred until the file is expanded (MutationObserver re-runs injection).
+
+### Validation
+
+Content script validates on load: `annotations` array present, each entry has valid `category` and at least one of `from`/`to`, each side has `file` (string) and `lines` ([int, int]). Extra fields (`group`, `name`, `comment`) are passed through without validation.
 
 ## Non-goals (for now)
 - Syncing review state across devices.
@@ -66,6 +126,6 @@ Line keys use `{side}:{lineNum}` to distinguish old vs new side in 2-up diffs.
 - Supporting other browsers (Chrome/Edge) — Firefox-only for now.
 
 ## Tech stack
-- Plain JS, no build step. Ship `manifest.json` + content script + CSS.
-- `browser.storage.local` for persistence.
+- Plain JS, no build step. Ship `manifest.json` + content scripts + background script + CSS.
+- `browser.storage.local` for persistence (review tracking only; annotations are session-only).
 - Manifest v2 with `browser_specific_settings.gecko`.
