@@ -7,8 +7,6 @@ Firefox extension for Phabricator code review on `phabricator.services.mozilla.c
 ### Comment Permalinks
 Each inline review comment gets a `#<id>` link (e.g. `#1641595`). Click to jump to it, or right-click → copy link for a shareable permalink.
 
-TODO comments get lost when changing the cell color
-
 ### Line-Level Review Tracking
 A narrow gutter column on each diff line lets you track review progress locally:
 
@@ -18,6 +16,8 @@ A narrow gutter column on each diff line lets you track review progress locally:
 - A floating badge shows `N/M reviewed` progress.
 
 Review state is stored per revision and diff in `browser.storage.local`. Interdiffs (`?vs=X&id=Y`) are tracked separately.
+
+TODO comments get lost when changing the cell color
 
 ### Annotation Mapping
 Load a JSON mapping file to visualize how code moved between files in a large refactoring diff. Useful when porting JS to C++, splitting/merging modules, etc.

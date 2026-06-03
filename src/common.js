@@ -19,23 +19,13 @@ function getVsId() {
 
 function resolveDiffId() {
   const explicit = getDiffId();
-  if (explicit) {
-    console.log(LOG_PREFIX, "diff id from query param:", explicit);
-    return explicit;
-  }
+  if (explicit) return explicit;
   const radio = document.querySelector('input[name="id"]:checked');
-  if (radio && radio.value) {
-    console.log(LOG_PREFIX, "diff id from checked radio:", radio.value);
-    return radio.value;
-  }
+  if (radio && radio.value) return radio.value;
   const header = document.querySelector(".phui-header-header");
   if (header) {
     const m = header.textContent.match(/Diff\s+(\d+)/);
-    if (m) {
-      console.log(LOG_PREFIX, "diff id from header:", m[1]);
-      return m[1];
-    }
+    if (m) return m[1];
   }
-  console.error(LOG_PREFIX, "could not determine diff id");
   return null;
 }

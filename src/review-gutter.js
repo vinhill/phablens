@@ -172,7 +172,8 @@ function applyState(cell, filePath, side, lineNum, state) {
   } else {
     cell.removeAttribute("data-state");
   }
-  setLineState(filePath, side, lineNum, state);
+  const existing = getLineState(filePath, side, lineNum);
+  setLineState(filePath, side, lineNum, state, existing ? existing.note : "");
   updateSummaryBadge();
 }
 

@@ -11,15 +11,20 @@ function isLensOpen() {
 }
 
 function _injectLensPageScript() {
-  if (document.getElementById("phabvanced-lens-page-script")) return;
-  const script = document.createElement("script");
-  script.id = "phabvanced-lens-page-script";
-  script.src = browser.runtime.getURL("src/annot-lens-page.js");
-  document.documentElement.append(script);
+  if (document.getElementById("phabvanced-lens-page-script")) {
+    return Promise.resolve();
+  }
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.id = "phabvanced-lens-page-script";
+    script.src = browser.runtime.getURL("src/annot-lens-page.js");
+    script.addEventListener("load", resolve);
+    document.documentElement.append(script);
+  });
 }
 
 async function openAnnotLens() {
-  _injectLensPageScript();
+  await _injectLensPageScript();
 
   if (isLensOpen()) {
     window.dispatchEvent(new CustomEvent("phabvanced-lens-close"));

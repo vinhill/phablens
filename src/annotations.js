@@ -124,23 +124,15 @@ function removeAnnotationGutter() {
 }
 
 function injectAnnotationGutter() {
-  if (!_annotationData) {
-    console.log(LOG_PREFIX, "annot: no annotation data loaded");
-    return;
-  }
+  if (!_annotationData) return;
 
   const annotFiles = new Set();
   for (const a of _annotationData.annotations) {
     if (a.from) annotFiles.add(a.from.file);
     if (a.to) annotFiles.add(a.to.file);
   }
-  console.log(LOG_PREFIX, "annot: looking for files:", [...annotFiles]);
 
   const changesets = document.querySelectorAll('[data-sigil="differential-changeset"]');
-  console.log(LOG_PREFIX, "annot: found", changesets.length, "changesets");
-
-  let injectedCount = 0;
-  let matchedCells = 0;
 
   for (const changeset of changesets) {
     const table = changeset.querySelector("table.differential-diff");
@@ -152,16 +144,9 @@ function injectAnnotationGutter() {
     const rows = table.querySelectorAll("tbody tr");
     const hasCodeRows = [...rows].some((tr) => tr.querySelectorAll("td.n[data-n]").length > 0);
 
-    if (!hasCodeRows) {
-      console.log(LOG_PREFIX, "annot: skipping collapsed file:", filePath);
-      continue;
-    }
-
-    const fileHasAnnotations = annotFiles.has(filePath);
-    console.log(LOG_PREFIX, "annot: processing file:", filePath, fileHasAnnotations ? "(has annotations)" : "(no annotations)");
+    if (!hasCodeRows) continue;
 
     table.dataset.phabvancedAnnot = "1";
-    injectedCount++;
 
     const colgroup = table.querySelector("colgroup");
     if (colgroup) {
@@ -192,9 +177,7 @@ function injectAnnotationGutter() {
       if (targetTd) {
         const info = parseLineInfo(targetTd);
         if (info) {
-          const cell = createAnnotCell(filePath, info.side, info.lineNum);
-          if (cell.hasAttribute("data-annot-idx")) matchedCells++;
-          tr.append(cell);
+          tr.append(createAnnotCell(filePath, info.side, info.lineNum));
           continue;
         }
       }
@@ -206,7 +189,6 @@ function injectAnnotationGutter() {
     }
   }
 
-  console.log(LOG_PREFIX, "annot: injected gutter into", injectedCount, "tables,", matchedCells, "cells matched annotations");
 }
 
 // --- In-page annotation panel ---
@@ -236,8 +218,6 @@ function validateAnnotations(data) {
   return null;
 }
 
-// TODO can we clean this up a bit, maybe move to its own file and use a
-// template / html string / html file for the markup?
 function toggleAnnotationPanel() {
   const existing = document.getElementById("phabvanced-annot-panel");
   if (existing) {
@@ -245,31 +225,34 @@ function toggleAnnotationPanel() {
     return;
   }
 
+  const statusText = _annotationData
+    ? `${_annotationData.annotations.length} annotation(s) loaded`
+    : "No annotations loaded";
+  const lensLabel = isLensOpen() ? "Close Lens" : "Open Lens";
+
+  const html = `
+    <strong>Phabvanced Annotations</strong>
+    <div class="phabvanced-annot-panel-status">${statusText}</div>
+    <div class="phabvanced-annot-panel-error"></div>
+    <input type="file" accept=".json" style="display:none">
+    <div class="phabvanced-annot-panel-buttons">
+      <button class="phabvanced-annot-panel-btn phabvanced-annot-panel-btn-load">Load JSON</button>
+      <button class="phabvanced-annot-panel-btn phabvanced-annot-panel-btn-clear">Clear</button>
+      ${isLensApiAvailable() ? `<button id="phabvanced-lens-btn" class="phabvanced-annot-panel-btn phabvanced-annot-panel-btn-lens">${lensLabel}</button>` : ""}
+      <button class="phabvanced-annot-panel-btn phabvanced-annot-panel-btn-close">Close</button>
+    </div>`;
+
   const panel = document.createElement("div");
   panel.id = "phabvanced-annot-panel";
   panel.setAttribute("data-phabvanced", "1");
+  panel.innerHTML = html;
 
-  const title = document.createElement("strong");
-  title.textContent = "Phabvanced Annotations";
+  const status = panel.querySelector(".phabvanced-annot-panel-status");
+  const error = panel.querySelector(".phabvanced-annot-panel-error");
+  const fileInput = panel.querySelector("input[type=file]");
 
-  const status = document.createElement("div");
-  status.className = "phabvanced-annot-panel-status";
-  status.textContent = _annotationData
-    ? `${_annotationData.annotations.length} annotation(s) loaded`
-    : "No annotations loaded";
-
-  const error = document.createElement("div");
-  error.className = "phabvanced-annot-panel-error";
-
-  const fileInput = document.createElement("input");
-  fileInput.type = "file";
-  fileInput.accept = ".json";
-  fileInput.style.display = "none";
-
-  const loadBtn = document.createElement("button");
-  loadBtn.className = "phabvanced-annot-panel-btn phabvanced-annot-panel-btn-load";
-  loadBtn.textContent = "Load JSON";
-  loadBtn.addEventListener("click", () => fileInput.click());
+  panel.querySelector(".phabvanced-annot-panel-btn-load")
+    .addEventListener("click", () => fileInput.click());
 
   fileInput.addEventListener("change", async () => {
     const file = fileInput.files[0];
@@ -291,41 +274,23 @@ function toggleAnnotationPanel() {
     fileInput.value = "";
   });
 
-  const clearBtn = document.createElement("button");
-  clearBtn.className = "phabvanced-annot-panel-btn phabvanced-annot-panel-btn-clear";
-  clearBtn.textContent = "Clear";
-  clearBtn.addEventListener("click", () => {
-    clearAnnotations();
-    status.textContent = "No annotations loaded";
-    error.textContent = "";
-  });
+  panel.querySelector(".phabvanced-annot-panel-btn-clear")
+    .addEventListener("click", () => {
+      clearAnnotations();
+      status.textContent = "No annotations loaded";
+      error.textContent = "";
+    });
 
-  let lensBtn = null;
-  if (isLensApiAvailable()) {
-    lensBtn = document.createElement("button");
-    lensBtn.id = "phabvanced-lens-btn";
-    lensBtn.className = "phabvanced-annot-panel-btn phabvanced-annot-panel-btn-lens";
-    lensBtn.textContent = isLensOpen() ? "Close Lens" : "Open Lens";
-    lensBtn.addEventListener("click", () => openAnnotLens());
-  }
+  const lensBtn = panel.querySelector("#phabvanced-lens-btn");
+  if (lensBtn) lensBtn.addEventListener("click", () => openAnnotLens());
 
-  const closeBtn = document.createElement("button");
-  closeBtn.className = "phabvanced-annot-panel-btn";
-  closeBtn.textContent = "Close";
-  closeBtn.addEventListener("click", () => panel.remove());
+  panel.querySelector(".phabvanced-annot-panel-btn-close")
+    .addEventListener("click", () => panel.remove());
 
-  const btnRow = document.createElement("div");
-  btnRow.className = "phabvanced-annot-panel-buttons";
-  btnRow.append(loadBtn, clearBtn);
-  if (lensBtn) btnRow.append(lensBtn);
-  btnRow.append(closeBtn);
-
-  panel.append(title, status, error, fileInput, btnRow);
   document.body.append(panel);
 }
 
 function loadAnnotations(data) {
-  console.log(LOG_PREFIX, "annot: loading", data.annotations.length, "annotations");
   removeAnnotationGutter();
   _annotationData = data;
   injectAnnotationGutter();
