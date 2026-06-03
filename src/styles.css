@@ -303,6 +303,17 @@ col.phabvanced-annot-col {
   background: #a40e26;
 }
 
+/* Annotation lens button */
+.phabvanced-annot-panel-btn-lens {
+  background: #8250df;
+  color: #fff;
+  border-color: #8250df;
+}
+
+.phabvanced-annot-panel-btn-lens:hover {
+  background: #6639ba;
+}
+
 /* Summary badge */
 #phabvanced-summary {
   position: fixed;

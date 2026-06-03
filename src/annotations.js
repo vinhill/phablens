@@ -85,6 +85,10 @@ function createAnnotCell(filePath, side, lineNum) {
   if (annotation.comment) parts.push(annotation.comment);
   cell.title = parts.join(" — ");
 
+  cell.addEventListener("mouseenter", () => {
+    updateAnnotLens(annotation, index, side);
+  });
+
   const linked = getLinkedRef(annotation, side);
   if (linked && ANNOT_LINKED.has(annotation.category)) {
     cell.classList.add("phabvanced-annot-linked");
@@ -296,6 +300,15 @@ function toggleAnnotationPanel() {
     error.textContent = "";
   });
 
+  let lensBtn = null;
+  if (isLensApiAvailable()) {
+    lensBtn = document.createElement("button");
+    lensBtn.id = "phabvanced-lens-btn";
+    lensBtn.className = "phabvanced-annot-panel-btn phabvanced-annot-panel-btn-lens";
+    lensBtn.textContent = isLensOpen() ? "Close Lens" : "Open Lens";
+    lensBtn.addEventListener("click", () => openAnnotLens());
+  }
+
   const closeBtn = document.createElement("button");
   closeBtn.className = "phabvanced-annot-panel-btn";
   closeBtn.textContent = "Close";
@@ -303,7 +316,9 @@ function toggleAnnotationPanel() {
 
   const btnRow = document.createElement("div");
   btnRow.className = "phabvanced-annot-panel-buttons";
-  btnRow.append(loadBtn, clearBtn, closeBtn);
+  btnRow.append(loadBtn, clearBtn);
+  if (lensBtn) btnRow.append(lensBtn);
+  btnRow.append(closeBtn);
 
   panel.append(title, status, error, fileInput, btnRow);
   document.body.append(panel);
@@ -319,4 +334,5 @@ function loadAnnotations(data) {
 function clearAnnotations() {
   removeAnnotationGutter();
   _annotationData = null;
+  closeAnnotLens();
 }

@@ -7,6 +7,8 @@ Firefox extension for Phabricator code review on `phabricator.services.mozilla.c
 ### Comment Permalinks
 Each inline review comment gets a `#<id>` link (e.g. `#1641595`). Click to jump to it, or right-click → copy link for a shareable permalink.
 
+TODO comments get lost when changing the cell color
+
 ### Line-Level Review Tracking
 A narrow gutter column on each diff line lets you track review progress locally:
 
@@ -44,6 +46,17 @@ Load a JSON mapping file to visualize how code moved between files in a large re
 ```
 
 Required: `category` + at least one of `from`/`to`. Optional: `group`, `name` (on from/to), `comment`.
+
+### Annotation Lens (Picture-in-Picture)
+
+Open a floating lens window that shows annotation details as you hover over the gutter.
+
+- In the annotation panel, click **Open Lens** to pop out a Document Picture-in-Picture window.
+- **Hover** any annotation cell — the lens updates with the annotation's category, comment, and the corresponding source code cloned from the diff.
+- For linked annotations (ported/inlined/merged/split), the lens shows the counterpart code (hover `from` → see `to`, and vice versa).
+- For unlinked annotations (removed, new), the lens shows whichever side exists.
+
+Requires Firefox flag `dom.pictureInPictureAPI.documentEnabled` in `about:config`. The button is hidden when the API is unavailable.
 
 ## Install
 

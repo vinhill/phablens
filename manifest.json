@@ -23,6 +23,7 @@
         "src/permalinks.js",
         "src/review-gutter.js",
         "src/annotations.js",
+        "src/annot-lens.js",
         "src/content.js"
       ],
       "css": [
@@ -30,6 +31,9 @@
       ],
       "run_at": "document_idle"
     }
+  ],
+  "web_accessible_resources": [
+    "src/annot-lens-page.js"
   ],
   "browser_specific_settings": {
     "gecko": {

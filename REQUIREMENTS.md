@@ -120,6 +120,58 @@ Same strategy as Feature 2: appends a `<col class="phabvanced-annot-col">` and p
 
 Content script validates on load: `annotations` array present, each entry has valid `category` and at least one of `from`/`to`, each side has `file` (string) and `lines` ([int, int]). Extra fields (`group`, `name`, `comment`) are passed through without validation.
 
+## Feature 4: Annotation Lens (Document Picture-in-Picture)
+
+A floating Document Picture-in-Picture window that acts as a detail lens for annotations. Hovering over annotation gutter cells updates the PiP window with the annotation's metadata and corresponding code.
+
+### Prerequisites
+
+Requires Firefox flag `dom.pictureInPictureAPI.documentEnabled` set to `true` in `about:config`. The "Open Lens" button is hidden when the API is unavailable.
+
+### Activation
+
+- A new **Open Lens** button in the annotation panel (between Clear and Close). Only visible when `documentPictureInPicture` is available.
+- Clicking it opens a Document PiP window and the button label changes to **Close Lens**.
+- Clicking again (or closing the PiP window externally) tears down the lens.
+- Clearing annotations also closes the lens.
+
+### PiP window content
+
+On hover over an annotation gutter cell, the lens displays:
+
+1. **Header** — annotation index, category badge (colored), group label if present.
+2. **Comment** — the annotation's `comment` field, if any.
+3. **Code** — the relevant source lines, cloned from the diff table.
+
+Which code is shown depends on the annotation:
+
+| Scenario | Code shown |
+|----------|-----------|
+| Linked annotation (ported/inlined/merged/split), hovered on `from` side | The `to` (counterpart) code |
+| Linked annotation, hovered on `to` side | The `from` (counterpart) code |
+| Unlinked annotation with only `from` (e.g. `removed`) | The `from` code |
+| Unlinked annotation with only `to` (e.g. `new`) | The `to` code |
+
+### Code extraction
+
+- Locate the target file's `table.differential-diff` by matching the file path from the annotation's `from`/`to` ref.
+- Query rows by line number range (`td[data-n]` between `lines[0]` and `lines[1]`).
+- Clone matched rows into a `<table>` inside the PiP document.
+- Copy the extension's stylesheet into the PiP window for consistent rendering.
+
+### Implementation
+
+- **New file: `src/annot-lens.js`** — PiP window lifecycle (`openAnnotLens`, `closeAnnotLens`) and content rendering (`updateAnnotLens`).
+- **`src/annotations.js`** — add `mouseenter` listener on annotation cells to call `updateAnnotLens`; add lens button to the panel.
+- **`src/styles.css`** — styles for lens content (header, category badge, code table).
+- **`manifest.json`** — add `src/annot-lens.js` to the content scripts list (after `annotations.js`).
+
+### Edge cases
+
+- If the counterpart file/lines are not visible in the diff (collapsed or not loaded), show a message instead of code.
+- If the PiP window is closed externally (user clicks PiP close button), reset the panel button state.
+- When annotations are cleared, close any open lens window.
+
 ## Non-goals (for now)
 - Syncing review state across devices.
 - Interaction with Phabricator's API or Conduit.
