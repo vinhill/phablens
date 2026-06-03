@@ -294,6 +294,14 @@ function injectGutterColumn() {
   for (const changeset of changesets) {
     const table = changeset.querySelector("table.differential-diff");
     if (!table || table.dataset.phabvancedGutter) continue;
+
+    const filePath = getFilePath(table.querySelector("tr") || changeset);
+    if (!filePath) continue;
+
+    const rows = table.querySelectorAll("tbody tr");
+    const hasCodeRows = [...rows].some((tr) => tr.querySelectorAll("td.n[data-n]").length > 0);
+    if (!hasCodeRows) continue;
+
     table.dataset.phabvancedGutter = "1";
 
     const colgroup = table.querySelector("colgroup");
@@ -303,12 +311,8 @@ function injectGutterColumn() {
       colgroup.append(col);
     }
 
-    const filePath = getFilePath(table.querySelector("tr") || changeset);
-    if (!filePath) continue;
-
     injectFileButtons(changeset, table);
 
-    const rows = table.querySelectorAll("tbody tr");
     for (const tr of rows) {
       const isSpecial = tr.classList.contains("inline") || tr.hasAttribute("data-sigil");
       if (isSpecial) {
