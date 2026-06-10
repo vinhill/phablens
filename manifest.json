@@ -1,13 +1,13 @@
 {
   "manifest_version": 2,
-  "name": "Phabvanced",
+  "name": "PhabLens",
   "version": "0.2.0",
   "description": "Enhanced Phabricator code review: permalink comments, line-level review tracking, and annotation mapping.",
   "permissions": [
     "storage"
   ],
   "browser_action": {
-    "default_title": "Phabvanced: Toggle Annotation Panel"
+    "default_title": "PhabLens: Toggle Annotation Panel"
   },
   "background": {
     "scripts": ["src/background.js"]
@@ -37,7 +37,7 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "phabvanced@vhilla"
+      "id": "phablens@vhilla"
     }
   }
 }

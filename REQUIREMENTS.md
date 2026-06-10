@@ -1,4 +1,4 @@
-# Phabvanced — Requirements
+# PhabLens — Requirements
 
 Firefox extension enhancing Phabricator's differential (code review) UI.
 

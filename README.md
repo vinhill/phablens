@@ -1,8 +1,10 @@
-# Phabvanced
+# PhabLens
 
 Firefox extension for Phabricator code review on `phabricator.services.mozilla.com`.
 
 ## Features
+
+![Example for the line-level tracking, comments and annotation gutter](gutter-example.png)
 
 ### Comment Permalinks
 Each inline review comment gets a `#<id>` link (e.g. `#1641595`). Click to jump to it, or right-click → copy link for a shareable permalink.
@@ -22,7 +24,7 @@ TODO comments get lost when changing the cell color
 ### Annotation Mapping
 Load a JSON mapping file to visualize how code moved between files in a large refactoring diff. Useful when porting JS to C++, splitting/merging modules, etc.
 
-- Click the **Phabvanced** toolbar icon to open the annotation panel, then **Load JSON**.
+- Click the **PhabLens** toolbar icon to open the annotation panel, then **Load JSON**.
 - A second gutter column appears. Each annotation gets its own color from a cycling palette, so adjacent blocks are always visually distinct.
 - **Hover** any colored cell to see its index, category, and comment.
 - **Click** a linked annotation (ported/inlined/merged/split) to scroll to the counterpart in the diff.
@@ -48,6 +50,8 @@ Load a JSON mapping file to visualize how code moved between files in a large re
 Required: `category` + at least one of `from`/`to`. Optional: `group`, `name` (on from/to), `comment`.
 
 ### Annotation Lens (Picture-in-Picture)
+
+![Example for the lens popout window](lens-example.png)
 
 Open a floating lens window that shows annotation details as you hover over the gutter.
 
