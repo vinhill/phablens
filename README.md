@@ -21,6 +21,8 @@ Review state is stored per revision and diff in `browser.storage.local`. Interdi
 
 TODO comments get lost when changing the cell color
 
+TODO clicking on the floating badge should jump to first unreviewed line.
+
 ### Annotation Mapping
 Load a JSON mapping file to visualize how code moved between files in a large refactoring diff. Useful when porting JS to C++, splitting/merging modules, etc.
 
