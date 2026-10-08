@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PhabLens Annotation Mapping",
+  "description": "Annotation mappings loaded by PhabLens to mark and cross-reference lines in a Phabricator diff.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["annotations"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional editor hint pointing to this schema. PhabLens ignores this field."
+    },
+    "annotations": {
+      "type": "array",
+      "description": "Ordered annotations. The zero-based array index is shown as the annotation number in the gutter and lens.",
+      "items": { "$ref": "#/$defs/annotation" }
+    }
+  },
+  "$defs": {
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category"],
+      "anyOf": [
+        { "required": ["from"] },
+        { "required": ["to"] }
+      ],
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": ["ported", "new", "inlined", "removed", "merged", "split"],
+          "description": "How to interpret the annotation. ported/inlined/merged/split are clickable when both sides are present; new and removed usually have one side."
+        },
+        "group": {
+          "type": "string",
+          "description": "Optional theme or section label shown in the annotation lens. Use it to cluster related mappings."
+        },
+        "from": {
+          "$ref": "#/$defs/ref",
+          "description": "Optional old-side source range. In side-by-side Phabricator diffs this corresponds to the left/original side."
+        },
+        "to": {
+          "$ref": "#/$defs/ref",
+          "description": "Optional new-side target range. In side-by-side Phabricator diffs this corresponds to the right/changed side."
+        },
+        "comment": {
+          "type": "string",
+          "description": "Optional explanation shown in hover text and in the lens. Keep it concise enough to scan during review."
+        }
+      }
+    },
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "lines"],
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1,
+          "description": "File path exactly as displayed in the Phabricator changeset header."
+        },
+        "lines": {
+          "type": "array",
+          "description": "Inclusive one-based line range [start, end] for this side of the diff.",
+          "prefixItems": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "integer", "minimum": 1 }
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional symbol, function, class, section, or short label shown in the lens."
+        }
+      }
+    }
+  }
+}

@@ -35,6 +35,7 @@ Load a JSON mapping file to visualize how code moved between files in a large re
 
 ```json
 {
+  "$schema": "./schemas/annotation-mapping.schema.json",
   "annotations": [
     {
       "category": "ported",
@@ -47,7 +48,8 @@ Load a JSON mapping file to visualize how code moved between files in a large re
 }
 ```
 
-Required: `category` + at least one of `from`/`to`. Optional: `group`, `name` (on from/to), `comment`.
+The field contract and descriptions are documented in `schemas/annotation-mapping.schema.json`.
+For agents creating these files, see `skills/phablens-annotation-json/SKILL.md`.
 
 ### Annotation Lens (Picture-in-Picture)
 
