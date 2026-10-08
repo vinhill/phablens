@@ -106,7 +106,7 @@ function createGutterCell(filePath, side, lineNum) {
 
   const existing = getLineState(filePath, side, lineNum);
   if (existing) {
-    cell.setAttribute("data-state", existing.state);
+    if (existing.state) cell.setAttribute("data-state", existing.state);
     if (existing.state === "reviewed") _reviewedGutters++;
     if (existing.note) {
       cell.title = existing.note;
@@ -352,12 +352,26 @@ function injectGutterColumn() {
 
 // --- Summary ---
 
+function scrollToFirstUnreviewed() {
+  const gutters = document.querySelectorAll(".phabvanced-gutter");
+  for (const g of gutters) {
+    if (g.getAttribute("data-state") !== "reviewed") {
+      g.scrollIntoView({ behavior: "smooth", block: "center" });
+      g.classList.add("phabvanced-flash");
+      setTimeout(() => g.classList.remove("phabvanced-flash"), 1000);
+      return;
+    }
+  }
+}
+
 function updateSummaryBadge() {
   let badge = document.getElementById("phabvanced-summary");
   if (!badge) {
     badge = document.createElement("div");
     badge.id = "phabvanced-summary";
     badge.setAttribute("data-phabvanced", "1");
+    badge.title = "Jump to first unreviewed line";
+    badge.addEventListener("click", scrollToFirstUnreviewed);
     document.body.append(badge);
   }
   badge.textContent = `${_reviewedGutters}/${_totalGutters} reviewed`;

@@ -327,4 +327,10 @@ col.phabvanced-annot-col {
   font-size: 12px;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.phabvanced-gutter.phabvanced-flash {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
 }

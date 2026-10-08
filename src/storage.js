@@ -49,10 +49,10 @@ function setLineState(filePath, side, lineNum, state, note) {
   if (!_reviewData) return;
   if (!_reviewData.lines[filePath]) _reviewData.lines[filePath] = {};
   const key = `${side}:${lineNum}`;
-  if (!state) {
+  if (!state && !note) {
     delete _reviewData.lines[filePath][key];
   } else {
-    _reviewData.lines[filePath][key] = { state, note: note || "" };
+    _reviewData.lines[filePath][key] = { state: state || null, note: note || "" };
   }
   saveReviewData();
 }
