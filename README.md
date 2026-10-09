@@ -19,8 +19,6 @@ A narrow gutter column on each diff line lets you track review progress locally:
 
 Review state is stored per revision and diff in `browser.storage.local`. Interdiffs (`?vs=X&id=Y`) are tracked separately.
 
-TODO some comments got weirdly moved, unclear why. Likely I expanded / hid some file / lines before / after.
-
 ### Annotation Mapping
 Load a JSON mapping file to visualize how code moved between files in a large refactoring diff. Useful when porting JS to C++, splitting/merging modules, etc.
 
