@@ -24,6 +24,7 @@
         "src/review-gutter.js",
         "src/annotations.js",
         "src/annot-lens.js",
+        "src/diff-navigation.js",
         "src/content.js"
       ],
       "css": [

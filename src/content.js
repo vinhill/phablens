@@ -41,6 +41,7 @@ async function init() {
 
   _observer = new MutationObserver(onMutations);
 
+  injectDiffNavigation();
   runInjections();
 }
 

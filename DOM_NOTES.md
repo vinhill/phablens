@@ -75,6 +75,8 @@ All changesets live inside `<div id="differential-review-stage">`.
 - Also in header: `<span class="phui-header-header">Diff 1289650</span>`
 
 History table has rows with `<a href="/D303899?id=1288740">1288740</a>` per diff.
+The two greatest numeric diff IDs are the latest pair. Compare them with
+`?vs=<previous>&id=<latest>` to open their interdiff.
 
 ## Storage Key Strategy
 

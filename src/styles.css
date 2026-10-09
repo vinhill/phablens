@@ -315,7 +315,8 @@ col.phablens-annot-col {
 }
 
 /* Summary badge */
-#phablens-summary {
+#phablens-summary,
+.phablens-diff-navigation {
   position: fixed;
   bottom: 12px;
   right: 12px;
@@ -328,6 +329,17 @@ col.phablens-annot-col {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   cursor: pointer;
+}
+
+.phablens-diff-navigation {
+  bottom: 48px;
+  text-decoration: none;
+}
+
+.phablens-diff-navigation:hover {
+  background: #32383f;
+  color: #fff;
+  text-decoration: none;
 }
 
 .phablens-gutter.phablens-flash {

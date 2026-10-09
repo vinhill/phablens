@@ -9,6 +9,11 @@ Firefox extension for Phabricator code review on `phabricator.services.mozilla.c
 ### Comment Permalinks
 Each inline review comment gets a `#<id>` link (e.g. `#1641595`). Click to jump to it, or right-click → copy link for a shareable permalink.
 
+### Floating latest diff / interdiff button
+The lower right has a floating button to quickly get to
+- the latest diff if on an interdiff or older diff
+- the latest interdiff otherwise
+
 ### Line-Level Review Tracking
 A narrow gutter column on each diff line lets you track review progress locally:
 
