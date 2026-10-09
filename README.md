@@ -4,7 +4,7 @@ Firefox extension for Phabricator code review on `phabricator.services.mozilla.c
 
 ## Features
 
-![Example for the line-level tracking, comments and annotation gutter](gutter-example.png)
+![Line review tracking, comment permalinks, and annotation gutter](gutter-example.png)
 
 ### Comment Permalinks
 Each inline review comment gets a `#<id>` link (e.g. `#1641595`). Click to jump to it, or right-click → copy link for a shareable permalink.
@@ -47,11 +47,11 @@ Load a JSON mapping file to visualize how code moved between files in a large re
 ```
 
 The field contract and descriptions are documented in `schemas/annotation-mapping.schema.json`.
-For agents creating these files, see `skills/phablens-annotation-json/SKILL.md`.
+For agents creating these files, see [the annotation skill](skills/phablens-annotation/SKILL.md).
 
 ### Annotation Lens (Picture-in-Picture)
 
-![Example for the lens popout window](lens-example.png)
+![Annotation lens popout window](lens-example.png)
 
 Open a floating lens window that shows annotation details as you hover over the gutter.
 
@@ -64,8 +64,4 @@ Requires Firefox flag `dom.pictureInPictureAPI.documentEnabled` in `about:config
 
 ## Install
 
-```
-web-ext run
-```
-
-Or load as a temporary extension via `about:debugging`.
+This is a plain JavaScript Firefox extension with no build step. Load the repository as a temporary extension from `about:debugging` → **This Firefox** → **Load Temporary Add-on…**, then select `manifest.json`. Review tracking is saved locally; annotation mappings are cleared when the page reloads.
