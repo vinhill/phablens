@@ -29,6 +29,7 @@ Line number cells have IDs: `C{changesetId}OL{lineNum}` / `C{changesetId}NL{line
 - Shift-click: range select from last clicked line.
 - Right-click: note popover.
 - Fixed badge bottom-right: `N/M reviewed`.
+- Clicking the badge jumps to the first line of the next unmarked block, skipping reviewed and flagged lines and wrapping at the end. Marked lines and file boundaries separate blocks. After 30 seconds without a badge click, navigation restarts at the first unmarked block.
 
 ### Storage
 

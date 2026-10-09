@@ -20,7 +20,7 @@ A narrow gutter column on each diff line lets you track review progress locally:
 - **Click** a line to mark it reviewed (green). Click again to flag it (red). Click again to clear.
 - **Click and drag** across multiple lines to mark a range at once.
 - **Right-click** to attach a local note.
-- A floating badge shows `N/M reviewed` progress.
+- A floating badge shows `N/M reviewed` progress. **Click the badge** to jump to the first line of the next unmarked block. After 30 seconds without a badge click, the next click restarts at the first unmarked block again.
 
 Review state is stored per revision and diff in `browser.storage.local`. Interdiffs (`?vs=X&id=Y`) are tracked separately.
 

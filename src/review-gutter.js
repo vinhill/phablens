@@ -4,6 +4,8 @@ const STATES = [null, "reviewed", "flagged"];
 
 let _totalGutters = 0;
 let _reviewedGutters = 0;
+let _lastUnreviewedGutter = null;
+let _lastUnreviewedClickAt = null;
 
 function nextState(current) {
   const idx = STATES.indexOf(current);
@@ -352,10 +354,30 @@ function injectGutterColumn() {
 
 // --- Summary ---
 
-function scrollToFirstUnreviewed() {
-  const gutters = document.querySelectorAll(".phablens-gutter");
-  for (const g of gutters) {
-    if (g.getAttribute("data-state") !== "reviewed") {
+function scrollToNextUnreviewed() {
+  const gutters = [...document.querySelectorAll(".phablens-gutter")];
+  const now = Date.now();
+  const lastIndex = _lastUnreviewedClickAt !== null &&
+    now - _lastUnreviewedClickAt < 30000
+    ? gutters.indexOf(_lastUnreviewedGutter)
+    : -1;
+  _lastUnreviewedClickAt = now;
+
+  // Skip the rest of the previous block, stopping at marked lines or a new file.
+  let blockEnd = lastIndex;
+  if (lastIndex !== -1) {
+    const file = gutters[lastIndex].dataset.phablensFile;
+    while (blockEnd + 1 < gutters.length &&
+      gutters[blockEnd + 1].dataset.phablensFile === file &&
+      !gutters[blockEnd + 1].getAttribute("data-state")) {
+      blockEnd++;
+    }
+  }
+
+  for (let offset = 1; offset <= gutters.length; offset++) {
+    const g = gutters[(blockEnd + offset) % gutters.length];
+    if (!g.getAttribute("data-state")) {
+      _lastUnreviewedGutter = g;
       g.scrollIntoView({ behavior: "smooth", block: "center" });
       g.classList.add("phablens-flash");
       setTimeout(() => g.classList.remove("phablens-flash"), 1000);
@@ -370,8 +392,8 @@ function updateSummaryBadge() {
     badge = document.createElement("div");
     badge.id = "phablens-summary";
     badge.setAttribute("data-phablens", "1");
-    badge.title = "Jump to first unreviewed line";
-    badge.addEventListener("click", scrollToFirstUnreviewed);
+    badge.title = "Jump to next unmarked block (restarts after 30 seconds)";
+    badge.addEventListener("click", scrollToNextUnreviewed);
     document.body.append(badge);
   }
   badge.textContent = `${_reviewedGutters}/${_totalGutters} reviewed`;
