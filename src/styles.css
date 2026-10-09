@@ -1,5 +1,5 @@
 /* Feature 1: Comment Permalinks */
-.phabvanced-permalink {
+.phablens-permalink {
   display: inline-block;
   margin-right: 6px;
   font-size: 0.85em;
@@ -10,16 +10,16 @@
   font-weight: bold;
 }
 
-.phabvanced-permalink:hover {
+.phablens-permalink:hover {
   opacity: 1;
 }
 
 /* Feature 2: Review gutter indicators */
-col.phabvanced-col {
+col.phablens-col {
   width: 14px;
 }
 
-.phabvanced-gutter {
+.phablens-gutter {
   width: 14px;
   min-width: 14px;
   max-width: 14px;
@@ -31,32 +31,32 @@ col.phabvanced-col {
   position: relative;
 }
 
-.phabvanced-gutter[data-state="reviewed"] {
+.phablens-gutter[data-state="reviewed"] {
   background-color: #2da44e;
 }
 
-.phabvanced-gutter[data-state="flagged"] {
+.phablens-gutter[data-state="flagged"] {
   background-color: #cf222e;
 }
 
-.phabvanced-gutter:hover {
+.phablens-gutter:hover {
   background-color: #c8ccd0;
 }
 
-.phabvanced-gutter[data-state="reviewed"]:hover {
+.phablens-gutter[data-state="reviewed"]:hover {
   background-color: #1a7f37;
 }
 
-.phabvanced-gutter[data-state="flagged"]:hover {
+.phablens-gutter[data-state="flagged"]:hover {
   background-color: #a40e26;
 }
 
-.phabvanced-gutter.phabvanced-drag-preview {
+.phablens-gutter.phablens-drag-preview {
   outline: 2px solid #0969da;
   outline-offset: -2px;
 }
 
-.phabvanced-gutter[data-has-note]::after {
+.phablens-gutter[data-has-note]::after {
   content: "";
   position: absolute;
   top: 0;
@@ -69,14 +69,14 @@ col.phabvanced-col {
 }
 
 /* File-level buttons */
-.phabvanced-file-btn-group {
+.phablens-file-btn-group {
   display: inline-flex;
   gap: 4px;
   margin-left: 8px;
   vertical-align: middle;
 }
 
-.phabvanced-file-btn {
+.phablens-file-btn {
   all: revert;
   padding: 1px 6px;
   font-size: 11px;
@@ -89,32 +89,32 @@ col.phabvanced-col {
   color: #24292f;
 }
 
-.phabvanced-file-btn:hover {
+.phablens-file-btn:hover {
   background: #e0e3e6;
 }
 
-.phabvanced-file-btn[data-state="reviewed"] {
+.phablens-file-btn[data-state="reviewed"] {
   background: #2da44e;
   color: #fff;
   border-color: #2da44e;
 }
 
-.phabvanced-file-btn[data-state="reviewed"]:hover {
+.phablens-file-btn[data-state="reviewed"]:hover {
   background: #1a7f37;
 }
 
-.phabvanced-file-btn[data-state="flagged"] {
+.phablens-file-btn[data-state="flagged"] {
   background: #cf222e;
   color: #fff;
   border-color: #cf222e;
 }
 
-.phabvanced-file-btn[data-state="flagged"]:hover {
+.phablens-file-btn[data-state="flagged"]:hover {
   background: #a40e26;
 }
 
 /* Note popover */
-.phabvanced-note-popover {
+.phablens-note-popover {
   position: absolute;
   z-index: 10000;
   background: #fff;
@@ -127,7 +127,7 @@ col.phabvanced-col {
   gap: 6px;
 }
 
-.phabvanced-note-popover textarea {
+.phablens-note-popover textarea {
   font-family: inherit;
   font-size: 12px;
   border: 1px solid #d0d7de;
@@ -137,13 +137,13 @@ col.phabvanced-col {
   min-height: 120px;
 }
 
-.phabvanced-note-popover .phabvanced-popover-buttons {
+.phablens-note-popover .phablens-popover-buttons {
   display: flex;
   gap: 4px;
   justify-content: flex-end;
 }
 
-.phabvanced-note-popover button {
+.phablens-note-popover button {
   all: revert;
   padding: 4px 10px;
   font-size: 12px;
@@ -156,25 +156,25 @@ col.phabvanced-col {
   color: #24292f;
 }
 
-.phabvanced-note-popover button.phabvanced-btn-delete {
+.phablens-note-popover button.phablens-btn-delete {
   background: #cf222e;
   color: #fff;
   border-color: #cf222e;
   margin-right: auto;
 }
 
-.phabvanced-note-popover button.phabvanced-btn-save {
+.phablens-note-popover button.phablens-btn-save {
   background: #2da44e;
   color: #fff;
   border-color: #2da44e;
 }
 
 /* Feature 3: Annotation mapping gutter */
-col.phabvanced-annot-col {
+col.phablens-annot-col {
   width: 14px;
 }
 
-.phabvanced-annot {
+.phablens-annot {
   width: 14px;
   min-width: 14px;
   max-width: 14px;
@@ -185,15 +185,15 @@ col.phabvanced-annot-col {
   position: relative;
 }
 
-.phabvanced-annot-linked {
+.phablens-annot-linked {
   cursor: pointer;
 }
 
-.phabvanced-annot[data-annot-idx]:hover {
+.phablens-annot[data-annot-idx]:hover {
   filter: brightness(0.8);
 }
 
-.phabvanced-annot-linked::after {
+.phablens-annot-linked::after {
   content: "\2192";
   position: absolute;
   top: 50%;
@@ -204,7 +204,7 @@ col.phabvanced-annot-col {
   pointer-events: none;
 }
 
-#phabvanced-toast {
+#phablens-toast {
   position: fixed;
   bottom: 48px;
   right: 12px;
@@ -216,16 +216,16 @@ col.phabvanced-annot-col {
   font-size: 12px;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  animation: phabvanced-fade-in 0.2s ease;
+  animation: phablens-fade-in 0.2s ease;
 }
 
-@keyframes phabvanced-fade-in {
+@keyframes phablens-fade-in {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 /* Annotation panel (in-page) */
-#phabvanced-annot-panel {
+#phablens-annot-panel {
   position: fixed;
   top: 12px;
   right: 12px;
@@ -244,7 +244,7 @@ col.phabvanced-annot-col {
   min-width: 240px;
 }
 
-.phabvanced-annot-panel-status {
+.phablens-annot-panel-status {
   padding: 4px 8px;
   background: #f6f8fa;
   border-radius: 4px;
@@ -252,22 +252,22 @@ col.phabvanced-annot-col {
   color: #57606a;
 }
 
-.phabvanced-annot-panel-error {
+.phablens-annot-panel-error {
   font-size: 12px;
   color: #cf222e;
   min-height: 0;
 }
 
-.phabvanced-annot-panel-error:empty {
+.phablens-annot-panel-error:empty {
   display: none;
 }
 
-.phabvanced-annot-panel-buttons {
+.phablens-annot-panel-buttons {
   display: flex;
   gap: 6px;
 }
 
-.phabvanced-annot-panel-btn {
+.phablens-annot-panel-btn {
   all: revert;
   padding: 5px 12px;
   font-size: 12px;
@@ -279,43 +279,43 @@ col.phabvanced-annot-col {
   color: #24292f;
 }
 
-.phabvanced-annot-panel-btn:hover {
+.phablens-annot-panel-btn:hover {
   background: #e0e3e6;
 }
 
-.phabvanced-annot-panel-btn-load {
+.phablens-annot-panel-btn-load {
   background: #0969da;
   color: #fff;
   border-color: #0969da;
 }
 
-.phabvanced-annot-panel-btn-load:hover {
+.phablens-annot-panel-btn-load:hover {
   background: #0550ae;
 }
 
-.phabvanced-annot-panel-btn-clear {
+.phablens-annot-panel-btn-clear {
   background: #cf222e;
   color: #fff;
   border-color: #cf222e;
 }
 
-.phabvanced-annot-panel-btn-clear:hover {
+.phablens-annot-panel-btn-clear:hover {
   background: #a40e26;
 }
 
 /* Annotation lens button */
-.phabvanced-annot-panel-btn-lens {
+.phablens-annot-panel-btn-lens {
   background: #8250df;
   color: #fff;
   border-color: #8250df;
 }
 
-.phabvanced-annot-panel-btn-lens:hover {
+.phablens-annot-panel-btn-lens:hover {
   background: #6639ba;
 }
 
 /* Summary badge */
-#phabvanced-summary {
+#phablens-summary {
   position: fixed;
   bottom: 12px;
   right: 12px;
@@ -330,7 +330,7 @@ col.phabvanced-annot-col {
   cursor: pointer;
 }
 
-.phabvanced-gutter.phabvanced-flash {
+.phablens-gutter.phablens-flash {
   outline: 2px solid #0969da;
   outline-offset: -2px;
 }

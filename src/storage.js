@@ -4,6 +4,11 @@ let _reviewData = null;
 let _storageKeyCache = null;
 
 function _storageKey(revisionId, diffId, vsId) {
+  if (vsId) return `phablens:${revisionId}:${vsId}-vs-${diffId}`;
+  return `phablens:${revisionId}:${diffId}`;
+}
+
+function _legacyStorageKey(revisionId, diffId, vsId) {
   if (vsId) return `phabvanced:${revisionId}:${vsId}-vs-${diffId}`;
   return `phabvanced:${revisionId}:${diffId}`;
 }
@@ -20,14 +25,18 @@ async function loadReviewData() {
 
   const key = _storageKey(revisionId, diffId, vsId);
   _storageKeyCache = key;
-  const result = await browser.storage.local.get(key);
-  _reviewData = result[key] || {
+  const legacyKey = _legacyStorageKey(revisionId, diffId, vsId);
+  const result = await browser.storage.local.get([key, legacyKey]);
+  _reviewData = result[key] || result[legacyKey] || {
     revisionId,
     diffId,
     vsId: vsId || null,
     lines: {},
     updatedAt: null,
   };
+  if (!result[key] && result[legacyKey]) {
+    await browser.storage.local.set({ [key]: _reviewData });
+  }
   return _reviewData;
 }
 

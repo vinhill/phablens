@@ -39,7 +39,7 @@ let _highlighted = [];
 
 function clearDragHighlight() {
   for (const g of _highlighted) {
-    g.classList.remove("phabvanced-drag-preview");
+    g.classList.remove("phablens-drag-preview");
   }
   _highlighted = [];
 }
@@ -56,9 +56,9 @@ function updateDragHighlight() {
   const from = Math.min(startIdx, endIdx);
   const to = Math.max(startIdx, endIdx);
   for (let i = from; i <= to; i++) {
-    const g = rows[i].querySelector(".phabvanced-gutter");
+    const g = rows[i].querySelector(".phablens-gutter");
     if (g) {
-      g.classList.add("phabvanced-drag-preview");
+      g.classList.add("phablens-drag-preview");
       _highlighted.push(g);
     }
   }
@@ -75,13 +75,13 @@ function applyDragRange() {
   const from = Math.min(startIdx, endIdx);
   const to = Math.max(startIdx, endIdx);
   for (let i = from; i <= to; i++) {
-    const g = rows[i].querySelector(".phabvanced-gutter");
+    const g = rows[i].querySelector(".phablens-gutter");
     if (!g) continue;
     applyState(
       g,
-      g.dataset.phabvancedFile,
-      g.dataset.phabvancedSide,
-      g.dataset.phabvancedLine,
+      g.dataset.phablensFile,
+      g.dataset.phablensSide,
+      g.dataset.phablensLine,
       _dragState
     );
   }
@@ -99,8 +99,8 @@ function resetDrag() {
 
 function createGutterCell(filePath, side, lineNum) {
   const cell = document.createElement("td");
-  cell.className = "phabvanced-gutter";
-  cell.setAttribute("data-phabvanced", "1");
+  cell.className = "phablens-gutter";
+  cell.setAttribute("data-phablens", "1");
 
   _totalGutters++;
 
@@ -137,9 +137,9 @@ function createGutterCell(filePath, side, lineNum) {
     showNotePopover(cell, filePath, side, lineNum);
   });
 
-  cell.dataset.phabvancedFile = filePath;
-  cell.dataset.phabvancedSide = side;
-  cell.dataset.phabvancedLine = lineNum;
+  cell.dataset.phablensFile = filePath;
+  cell.dataset.phablensSide = side;
+  cell.dataset.phablensLine = lineNum;
 
   return cell;
 }
@@ -149,9 +149,9 @@ document.addEventListener("mouseup", (e) => {
   if (_dragStart === _dragEnd) {
     applyState(
       _dragStart,
-      _dragStart.dataset.phabvancedFile,
-      _dragStart.dataset.phabvancedSide,
-      _dragStart.dataset.phabvancedLine,
+      _dragStart.dataset.phablensFile,
+      _dragStart.dataset.phablensSide,
+      _dragStart.dataset.phablensLine,
       _dragState
     );
   } else {
@@ -180,12 +180,12 @@ function applyState(cell, filePath, side, lineNum, state) {
 // --- Note popover ---
 
 function showNotePopover(cell, filePath, side, lineNum) {
-  const existing = document.querySelector(".phabvanced-note-popover");
+  const existing = document.querySelector(".phablens-note-popover");
   if (existing) existing.remove();
 
   const popover = document.createElement("div");
-  popover.className = "phabvanced-note-popover";
-  popover.setAttribute("data-phabvanced", "1");
+  popover.className = "phablens-note-popover";
+  popover.setAttribute("data-phablens", "1");
 
   const textarea = document.createElement("textarea");
   textarea.rows = 5;
@@ -194,7 +194,7 @@ function showNotePopover(cell, filePath, side, lineNum) {
   textarea.value = current ? current.note : "";
 
   const saveBtn = document.createElement("button");
-  saveBtn.className = "phabvanced-btn-save";
+  saveBtn.className = "phablens-btn-save";
   saveBtn.textContent = "Save";
   saveBtn.addEventListener("click", () => {
     const state = cell.getAttribute("data-state") || "flagged";
@@ -213,7 +213,7 @@ function showNotePopover(cell, filePath, side, lineNum) {
   });
 
   const deleteBtn = document.createElement("button");
-  deleteBtn.className = "phabvanced-btn-delete";
+  deleteBtn.className = "phablens-btn-delete";
   deleteBtn.textContent = "Delete";
   deleteBtn.addEventListener("click", () => {
     const entry = getLineState(filePath, side, lineNum);
@@ -225,12 +225,12 @@ function showNotePopover(cell, filePath, side, lineNum) {
   });
 
   const cancelBtn = document.createElement("button");
-  cancelBtn.className = "phabvanced-btn-cancel";
+  cancelBtn.className = "phablens-btn-cancel";
   cancelBtn.textContent = "Cancel";
   cancelBtn.addEventListener("click", () => popover.remove());
 
   const btnRow = document.createElement("div");
-  btnRow.className = "phabvanced-popover-buttons";
+  btnRow.className = "phablens-popover-buttons";
   btnRow.append(deleteBtn, cancelBtn, saveBtn);
   popover.append(textarea, btnRow);
 
@@ -243,13 +243,13 @@ function showNotePopover(cell, filePath, side, lineNum) {
 // --- File-level buttons ---
 
 function setAllInTable(table, state) {
-  const gutters = table.querySelectorAll(".phabvanced-gutter");
+  const gutters = table.querySelectorAll(".phablens-gutter");
   for (const g of gutters) {
     applyState(
       g,
-      g.dataset.phabvancedFile,
-      g.dataset.phabvancedSide,
-      g.dataset.phabvancedLine,
+      g.dataset.phablensFile,
+      g.dataset.phablensSide,
+      g.dataset.phablensLine,
       state
     );
   }
@@ -257,9 +257,9 @@ function setAllInTable(table, state) {
 
 function createFileButton(label, state, table) {
   const btn = document.createElement("button");
-  btn.className = "phabvanced-file-btn";
+  btn.className = "phablens-file-btn";
   if (state) btn.setAttribute("data-state", state);
-  btn.setAttribute("data-phabvanced", "1");
+  btn.setAttribute("data-phablens", "1");
   btn.textContent = label;
   btn.addEventListener("click", (e) => {
     e.preventDefault();
@@ -271,12 +271,12 @@ function createFileButton(label, state, table) {
 
 function injectFileButtons(changeset, table) {
   const header = changeset.querySelector("h1.differential-file-icon-header");
-  if (!header || header.dataset.phabvancedButtons) return;
-  header.dataset.phabvancedButtons = "1";
+  if (!header || header.dataset.phablensButtons) return;
+  header.dataset.phablensButtons = "1";
 
   const group = document.createElement("span");
-  group.className = "phabvanced-file-btn-group";
-  group.setAttribute("data-phabvanced", "1");
+  group.className = "phablens-file-btn-group";
+  group.setAttribute("data-phablens", "1");
   group.append(
     createFileButton("Clear", null, table),
     createFileButton("Reviewed", "reviewed", table),
@@ -294,7 +294,7 @@ function injectGutterColumn() {
 
   for (const changeset of changesets) {
     const table = changeset.querySelector("table.differential-diff");
-    if (!table || table.dataset.phabvancedGutter) continue;
+    if (!table || table.dataset.phablensGutter) continue;
 
     const filePath = getFilePath(table.querySelector("tr") || changeset);
     if (!filePath) continue;
@@ -303,12 +303,12 @@ function injectGutterColumn() {
     const hasCodeRows = [...rows].some((tr) => tr.querySelectorAll("td.n[data-n]").length > 0);
     if (!hasCodeRows) continue;
 
-    table.dataset.phabvancedGutter = "1";
+    table.dataset.phablensGutter = "1";
 
     const colgroup = table.querySelector("colgroup");
     if (colgroup) {
       const col = document.createElement("col");
-      col.className = "phabvanced-col";
+      col.className = "phablens-col";
       colgroup.append(col);
     }
 
@@ -343,7 +343,7 @@ function injectGutterColumn() {
       }
 
       const spacer = document.createElement("td");
-      spacer.setAttribute("data-phabvanced", "1");
+      spacer.setAttribute("data-phablens", "1");
       tr.append(spacer);
     }
   }
@@ -353,23 +353,23 @@ function injectGutterColumn() {
 // --- Summary ---
 
 function scrollToFirstUnreviewed() {
-  const gutters = document.querySelectorAll(".phabvanced-gutter");
+  const gutters = document.querySelectorAll(".phablens-gutter");
   for (const g of gutters) {
     if (g.getAttribute("data-state") !== "reviewed") {
       g.scrollIntoView({ behavior: "smooth", block: "center" });
-      g.classList.add("phabvanced-flash");
-      setTimeout(() => g.classList.remove("phabvanced-flash"), 1000);
+      g.classList.add("phablens-flash");
+      setTimeout(() => g.classList.remove("phablens-flash"), 1000);
       return;
     }
   }
 }
 
 function updateSummaryBadge() {
-  let badge = document.getElementById("phabvanced-summary");
+  let badge = document.getElementById("phablens-summary");
   if (!badge) {
     badge = document.createElement("div");
-    badge.id = "phabvanced-summary";
-    badge.setAttribute("data-phabvanced", "1");
+    badge.id = "phablens-summary";
+    badge.setAttribute("data-phablens", "1");
     badge.title = "Jump to first unreviewed line";
     badge.addEventListener("click", scrollToFirstUnreviewed);
     document.body.append(badge);

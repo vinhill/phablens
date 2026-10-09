@@ -79,13 +79,13 @@ History table has rows with `<a href="/D303899?id=1288740">1288740</a>` per diff
 ## Storage Key Strategy
 
 Based on user spec:
-- Normal diff: `phabvanced:D303899:1289650`
-- Interdiff: `phabvanced:D303899:1288746-vs-1289650`
+- Normal diff: `phablens:D303899:1289650`
+- Interdiff: `phablens:D303899:1288746-vs-1289650`
 - Latest (no query param): resolve diff id from `input[name="id"]:checked` or header span, then use the resolved id as key
 
 ## Review Gutter Strategy
 
 The `col.cov` column exists but is always merged via colspan=2. Best approach:
-**Split the colspan** — change last td from `colspan="2"` to `colspan="1"`, insert a new `<td class="phabvanced-gutter">` after it. This reclaims the existing cov column slot without adding new columns to the colgroup.
+**Split the colspan** — change last td from `colspan="2"` to `colspan="1"`, insert a new `<td class="phablens-gutter">` after it. This reclaims the existing cov column slot without adding new columns to the colgroup.
 
 Lines to annotate are identified by: file path + side (old/new) + line number (`data-n`).

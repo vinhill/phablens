@@ -33,8 +33,8 @@ Line number cells have IDs: `C{changesetId}OL{lineNum}` / `C{changesetId}NL{line
 ### Storage
 
 Key format:
-- Normal diff: `phabvanced:D303899:1289650`
-- Interdiff: `phabvanced:D303899:1288746-vs-1289650`
+- Normal diff: `phablens:D303899:1289650`
+- Interdiff: `phablens:D303899:1288746-vs-1289650`
 - No query param: resolve diff id from `input[name="id"]:checked` or header span.
 
 Schema:
@@ -107,7 +107,7 @@ Colors are not per-category. Each annotation gets its own color from a 10-color 
 
 ### DOM injection
 
-Same strategy as Feature 2: appends a `<col class="phabvanced-annot-col">` and per-row `<td class="phabvanced-annot">` cells. Annotation matching: `from` side matches old-side lines, `to` side matches new-side lines, by file path and line range.
+Same strategy as Feature 2: appends a `<col class="phablens-annot-col">` and per-row `<td class="phablens-annot">` cells. Annotation matching: `from` side matches old-side lines, `to` side matches new-side lines, by file path and line range.
 
 ### UX
 

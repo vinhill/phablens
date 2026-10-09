@@ -57,12 +57,12 @@ function scrollToFileAndLine(filePath, lineNum) {
 }
 
 function showToast(msg) {
-  const existing = document.getElementById("phabvanced-toast");
+  const existing = document.getElementById("phablens-toast");
   if (existing) existing.remove();
 
   const toast = document.createElement("div");
-  toast.id = "phabvanced-toast";
-  toast.setAttribute("data-phabvanced", "1");
+  toast.id = "phablens-toast";
+  toast.setAttribute("data-phablens", "1");
   toast.textContent = msg;
   document.body.append(toast);
   setTimeout(() => toast.remove(), 3000);
@@ -71,8 +71,8 @@ function showToast(msg) {
 function createAnnotCell(filePath, side, lineNum) {
   const match = findAnnotation(filePath, side, lineNum);
   const cell = document.createElement("td");
-  cell.className = "phabvanced-annot";
-  cell.setAttribute("data-phabvanced", "1");
+  cell.className = "phablens-annot";
+  cell.setAttribute("data-phablens", "1");
 
   if (!match) return cell;
 
@@ -91,7 +91,7 @@ function createAnnotCell(filePath, side, lineNum) {
 
   const linked = getLinkedRef(annotation, side);
   if (linked && ANNOT_LINKED.has(annotation.category)) {
-    cell.classList.add("phabvanced-annot-linked");
+    cell.classList.add("phablens-annot-linked");
     cell.addEventListener("click", () => {
       scrollToFileAndLine(linked.file, linked.lines[0]);
     });
@@ -101,14 +101,14 @@ function createAnnotCell(filePath, side, lineNum) {
 }
 
 function removeAnnotationGutter() {
-  for (const col of document.querySelectorAll("col.phabvanced-annot-col")) {
+  for (const col of document.querySelectorAll("col.phablens-annot-col")) {
     col.remove();
   }
-  for (const cell of document.querySelectorAll("td.phabvanced-annot")) {
+  for (const cell of document.querySelectorAll("td.phablens-annot")) {
     cell.remove();
   }
-  for (const table of document.querySelectorAll("table[data-phabvanced-annot]")) {
-    table.removeAttribute("data-phabvanced-annot");
+  for (const table of document.querySelectorAll("table[data-phablens-annot]")) {
+    table.removeAttribute("data-phablens-annot");
 
     for (const tr of table.querySelectorAll("tbody tr")) {
       const isSpecial = tr.classList.contains("inline") || tr.hasAttribute("data-sigil");
@@ -136,7 +136,7 @@ function injectAnnotationGutter() {
 
   for (const changeset of changesets) {
     const table = changeset.querySelector("table.differential-diff");
-    if (!table || table.dataset.phabvancedAnnot) continue;
+    if (!table || table.dataset.phablensAnnot) continue;
 
     const filePath = getFilePath(table.querySelector("tr") || changeset);
     if (!filePath) continue;
@@ -146,12 +146,12 @@ function injectAnnotationGutter() {
 
     if (!hasCodeRows) continue;
 
-    table.dataset.phabvancedAnnot = "1";
+    table.dataset.phablensAnnot = "1";
 
     const colgroup = table.querySelector("colgroup");
     if (colgroup) {
       const col = document.createElement("col");
-      col.className = "phabvanced-annot-col";
+      col.className = "phablens-annot-col";
       colgroup.append(col);
     }
 
@@ -183,8 +183,8 @@ function injectAnnotationGutter() {
       }
 
       const spacer = document.createElement("td");
-      spacer.className = "phabvanced-annot";
-      spacer.setAttribute("data-phabvanced", "1");
+      spacer.className = "phablens-annot";
+      spacer.setAttribute("data-phablens", "1");
       tr.append(spacer);
     }
   }
@@ -219,7 +219,7 @@ function validateAnnotations(data) {
 }
 
 function toggleAnnotationPanel() {
-  const existing = document.getElementById("phabvanced-annot-panel");
+  const existing = document.getElementById("phablens-annot-panel");
   if (existing) {
     existing.remove();
     return;
@@ -231,27 +231,27 @@ function toggleAnnotationPanel() {
   const lensLabel = isLensOpen() ? "Close Lens" : "Open Lens";
 
   const html = `
-    <strong>Phabvanced Annotations</strong>
-    <div class="phabvanced-annot-panel-status">${statusText}</div>
-    <div class="phabvanced-annot-panel-error"></div>
+    <strong>PhabLens Annotations</strong>
+    <div class="phablens-annot-panel-status">${statusText}</div>
+    <div class="phablens-annot-panel-error"></div>
     <input type="file" accept=".json" style="display:none">
-    <div class="phabvanced-annot-panel-buttons">
-      <button class="phabvanced-annot-panel-btn phabvanced-annot-panel-btn-load">Load JSON</button>
-      <button class="phabvanced-annot-panel-btn phabvanced-annot-panel-btn-clear">Clear</button>
-      ${isLensApiAvailable() ? `<button id="phabvanced-lens-btn" class="phabvanced-annot-panel-btn phabvanced-annot-panel-btn-lens">${lensLabel}</button>` : ""}
-      <button class="phabvanced-annot-panel-btn phabvanced-annot-panel-btn-close">Close</button>
+    <div class="phablens-annot-panel-buttons">
+      <button class="phablens-annot-panel-btn phablens-annot-panel-btn-load">Load JSON</button>
+      <button class="phablens-annot-panel-btn phablens-annot-panel-btn-clear">Clear</button>
+      ${isLensApiAvailable() ? `<button id="phablens-lens-btn" class="phablens-annot-panel-btn phablens-annot-panel-btn-lens">${lensLabel}</button>` : ""}
+      <button class="phablens-annot-panel-btn phablens-annot-panel-btn-close">Close</button>
     </div>`;
 
   const panel = document.createElement("div");
-  panel.id = "phabvanced-annot-panel";
-  panel.setAttribute("data-phabvanced", "1");
+  panel.id = "phablens-annot-panel";
+  panel.setAttribute("data-phablens", "1");
   panel.innerHTML = html;
 
-  const status = panel.querySelector(".phabvanced-annot-panel-status");
-  const error = panel.querySelector(".phabvanced-annot-panel-error");
+  const status = panel.querySelector(".phablens-annot-panel-status");
+  const error = panel.querySelector(".phablens-annot-panel-error");
   const fileInput = panel.querySelector("input[type=file]");
 
-  panel.querySelector(".phabvanced-annot-panel-btn-load")
+  panel.querySelector(".phablens-annot-panel-btn-load")
     .addEventListener("click", () => fileInput.click());
 
   fileInput.addEventListener("change", async () => {
@@ -274,17 +274,17 @@ function toggleAnnotationPanel() {
     fileInput.value = "";
   });
 
-  panel.querySelector(".phabvanced-annot-panel-btn-clear")
+  panel.querySelector(".phablens-annot-panel-btn-clear")
     .addEventListener("click", () => {
       clearAnnotations();
       status.textContent = "No annotations loaded";
       error.textContent = "";
     });
 
-  const lensBtn = panel.querySelector("#phabvanced-lens-btn");
+  const lensBtn = panel.querySelector("#phablens-lens-btn");
   if (lensBtn) lensBtn.addEventListener("click", () => openAnnotLens());
 
-  panel.querySelector(".phabvanced-annot-panel-btn-close")
+  panel.querySelector(".phablens-annot-panel-btn-close")
     .addEventListener("click", () => panel.remove());
 
   document.body.append(panel);

@@ -11,12 +11,12 @@ function isLensOpen() {
 }
 
 function _injectLensPageScript() {
-  if (document.getElementById("phabvanced-lens-page-script")) {
+  if (document.getElementById("phablens-lens-page-script")) {
     return Promise.resolve();
   }
   return new Promise((resolve) => {
     const script = document.createElement("script");
-    script.id = "phabvanced-lens-page-script";
+    script.id = "phablens-lens-page-script";
     script.src = browser.runtime.getURL("src/annot-lens-page.js");
     script.addEventListener("load", resolve);
     document.documentElement.append(script);
@@ -27,7 +27,7 @@ async function openAnnotLens() {
   await _injectLensPageScript();
 
   if (isLensOpen()) {
-    window.dispatchEvent(new CustomEvent("phabvanced-lens-close"));
+    window.dispatchEvent(new CustomEvent("phablens-lens-close"));
     _lensOpen = false;
     updateLensButton();
     return;
@@ -35,23 +35,23 @@ async function openAnnotLens() {
 
   const opened = new Promise((resolve) => {
     const onOpened = () => {
-      window.removeEventListener("phabvanced-lens-opened", onOpened);
-      window.removeEventListener("phabvanced-lens-closed", onFailed);
+      window.removeEventListener("phablens-lens-opened", onOpened);
+      window.removeEventListener("phablens-lens-closed", onFailed);
       resolve(true);
     };
     const onFailed = () => {
-      window.removeEventListener("phabvanced-lens-opened", onOpened);
-      window.removeEventListener("phabvanced-lens-closed", onFailed);
+      window.removeEventListener("phablens-lens-opened", onOpened);
+      window.removeEventListener("phablens-lens-closed", onFailed);
       resolve(false);
     };
-    window.addEventListener("phabvanced-lens-opened", onOpened);
-    window.addEventListener("phabvanced-lens-closed", onFailed);
+    window.addEventListener("phablens-lens-opened", onOpened);
+    window.addEventListener("phablens-lens-closed", onFailed);
   });
 
-  window.dispatchEvent(new CustomEvent("phabvanced-lens-open"));
+  window.dispatchEvent(new CustomEvent("phablens-lens-open"));
   _lensOpen = await opened;
 
-  window.addEventListener("phabvanced-lens-closed", () => {
+  window.addEventListener("phablens-lens-closed", () => {
     _lensOpen = false;
     updateLensButton();
   });
@@ -61,13 +61,13 @@ async function openAnnotLens() {
 
 function closeAnnotLens() {
   if (!_lensOpen) return;
-  window.dispatchEvent(new CustomEvent("phabvanced-lens-close"));
+  window.dispatchEvent(new CustomEvent("phablens-lens-close"));
   _lensOpen = false;
   updateLensButton();
 }
 
 function updateLensButton() {
-  const btn = document.getElementById("phabvanced-lens-btn");
+  const btn = document.getElementById("phablens-lens-btn");
   if (btn) btn.textContent = isLensOpen() ? "Close Lens" : "Open Lens";
 }
 
@@ -95,31 +95,31 @@ function updateAnnotLens(annotation, index, side) {
   const parts = [];
 
   const groupHtml = annotation.group
-    ? `<span class="phabvanced-lens-group">${escapeHtml(annotation.group)}</span>`
+    ? `<span class="phablens-lens-group">${escapeHtml(annotation.group)}</span>`
     : "";
   parts.push(
-    `<div class="phabvanced-lens-header">` +
-    `<span class="phabvanced-lens-badge" style="background-color:${color}">#${index} ${escapeHtml(annotation.category)}</span>` +
+    `<div class="phablens-lens-header">` +
+    `<span class="phablens-lens-badge" style="background-color:${color}">#${index} ${escapeHtml(annotation.category)}</span>` +
     groupHtml +
     `</div>`
   );
 
   if (annotation.comment) {
-    parts.push(`<div class="phabvanced-lens-comment">${escapeHtml(annotation.comment)}</div>`);
+    parts.push(`<div class="phablens-lens-comment">${escapeHtml(annotation.comment)}</div>`);
   }
 
   if (showRef) {
     const name = showRef.name ? ` — ${escapeHtml(showRef.name)}` : "";
     parts.push(
-      `<div class="phabvanced-lens-file">${escapeHtml(showRef.file)}:${showRef.lines[0]}-${showRef.lines[1]}${name}</div>`
+      `<div class="phablens-lens-file">${escapeHtml(showRef.file)}:${showRef.lines[0]}-${showRef.lines[1]}${name}</div>`
     );
 
     const codeHtml = extractCodeRowsHtml(showRef.file, showRef.lines, showSide);
-    parts.push(codeHtml || '<div class="phabvanced-lens-empty">Code not visible in current diff view</div>');
+    parts.push(codeHtml || '<div class="phablens-lens-empty">Code not visible in current diff view</div>');
   }
 
   const detail = cloneInto({ html: parts.join("") }, window.wrappedJSObject);
-  window.dispatchEvent(new CustomEvent("phabvanced-lens-update", { detail }));
+  window.dispatchEvent(new CustomEvent("phablens-lens-update", { detail }));
 }
 
 function escapeHtml(str) {
@@ -158,7 +158,7 @@ function extractCodeRowsHtml(filePath, lines, side) {
     }
 
     if (rowsHtml.length === 0) return null;
-    return `<table class="phabvanced-lens-code remarkup-code"><tbody>${rowsHtml.join("")}</tbody></table>`;
+    return `<table class="phablens-lens-code remarkup-code"><tbody>${rowsHtml.join("")}</tbody></table>`;
   }
 
   return null;

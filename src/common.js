@@ -1,6 +1,6 @@
 "use strict";
 
-const LOG_PREFIX = "[phabvanced]";
+const LOG_PREFIX = "[phablens]";
 
 function getRevisionId() {
   const match = window.location.pathname.match(/\/(D\d+)/);

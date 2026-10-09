@@ -5,7 +5,7 @@ let _observer = null;
 
 function onMutations(mutations) {
   const selfOnly = mutations.every(
-    (m) => m.target.closest && m.target.closest("[data-phabvanced]")
+    (m) => m.target.closest && m.target.closest("[data-phablens]")
   );
   if (selfOnly) return;
 
