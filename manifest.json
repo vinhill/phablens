@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "PhabLens",
-  "version": "0.2.0",
-  "description": "Enhanced Phabricator code review: permalink comments, line-level review tracking, and annotation mapping.",
+  "version": "1.0.0",
+  "description": "Phabricator code review features I wanted to have",
   "permissions": [
     "storage"
   ],
@@ -38,7 +38,12 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "phablens@vhilla"
+      "id": "phablens@vhilla",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
     }
   }
 }
