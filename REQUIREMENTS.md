@@ -182,3 +182,17 @@ Which code is shown depends on the annotation:
 - Plain JS, no build step. Ship `manifest.json` + content scripts + background script + CSS.
 - `browser.storage.local` for persistence (review tracking only; annotations are session-only).
 - Manifest v2 with `browser_specific_settings.gecko`.
+
+# Publishing to Firefox Store
+
+Create an upload-ready package from the repository root:
+
+```sh
+python3 scripts/package-firefox.py
+```
+
+The script writes `artifacts/phablens-<version>-firefox.zip`. It includes `manifest.json` and the runtime files in `src/`; there is no build step. The package is also accepted with its `.zip` extension by AMO.
+
+To publish it publicly, sign in to [addons.mozilla.org](https://addons.mozilla.org/), open the [Add-on Developer Hub](https://addons.mozilla.org/developers/), and choose **Submit a New Add-on** → **On this site**. Upload the ZIP, address any validator errors, fill in the listing details, and submit. Firefox will deliver future listed updates automatically; upload each new version from the add-on's existing Developer Hub page.
+
+To share it without a public listing, choose **On your own** instead. Upload the ZIP for signing, then download the signed XPI from the submission page and share or host that file. Firefox still requires Mozilla's signature for regular releases. Increment `version` in `manifest.json` for each release. Mozilla may review submissions, and minified, bundled, or generated code can require a source-code submission; this extension currently ships readable source directly.

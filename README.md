@@ -1,6 +1,6 @@
 # PhabLens
 
-Firefox extension for Phabricator code review on `phabricator.services.mozilla.com`.
+[Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/phablens/) for Phabricator code review on `phabricator.services.mozilla.com`. This is a collection of utilities I, vhilla, wanted to have.
 
 ## Features
 
@@ -20,12 +20,12 @@ A narrow gutter column on each diff line lets you track review progress locally:
 - **Click** a line to mark it reviewed (green). Click again to flag it (red). Click again to clear.
 - **Click and drag** across multiple lines to mark a range at once.
 - **Right-click** to attach a local note.
-- A floating badge shows `N/M reviewed` progress. **Click the badge** to jump to the first line of the next unmarked block. After 30 seconds without a badge click, the next click restarts at the first unmarked block again.
+- A floating badge shows `N/M reviewed` progress. **Click the badge** to jump to the first line of the next unmarked block.
 
-Review state is stored per revision and diff in `browser.storage.local`. Interdiffs (`?vs=X&id=Y`) are tracked separately.
+Review state is stored per revision and diff or interdiff locally in the browser.
 
-### Annotation Mapping
-Load a JSON mapping file to visualize how code moved between files in a large refactoring diff. Useful when porting JS to C++, splitting/merging modules, etc.
+### Annotation Mapping and Notes
+Load a JSON file to attach notes to code blocks and to visualize how code moved between files during refactoring diffs. Useful for reviewing refactorings, LLM generated code, or code that needs lots of explanation.
 
 - Click the **PhabLens** toolbar icon to open the annotation panel, then **Load JSON**.
 - A second gutter column appears. Each annotation gets its own color from a cycling palette, so adjacent blocks are always visually distinct.
@@ -65,22 +65,6 @@ Open a floating lens window that shows annotation details as you hover over the 
 - For linked annotations (ported/inlined/merged/split), the lens shows the counterpart code (hover `from` → see `to`, and vice versa).
 - For unlinked annotations (removed, new), the lens shows whichever side exists.
 
-Requires Firefox flag `dom.pictureInPictureAPI.documentEnabled` in `about:config`. The button is hidden when the API is unavailable.
-
 ## Install
 
-This is a plain JavaScript Firefox extension with no build step. Load the repository as a temporary extension from `about:debugging` → **This Firefox** → **Load Temporary Add-on…**, then select `manifest.json`. Review tracking is saved locally; annotation mappings are cleared when the page reloads.
-
-## Publish to Firefox
-
-Create an upload-ready package from the repository root:
-
-```sh
-python3 scripts/package-firefox.py
-```
-
-The script writes `artifacts/phablens-<version>-firefox.zip`. It includes `manifest.json` and the runtime files in `src/`; there is no build step. The package is also accepted with its `.zip` extension by AMO.
-
-To publish it publicly, sign in to [addons.mozilla.org](https://addons.mozilla.org/), open the [Add-on Developer Hub](https://addons.mozilla.org/developers/), and choose **Submit a New Add-on** → **On this site**. Upload the ZIP, address any validator errors, fill in the listing details, and submit. Firefox will deliver future listed updates automatically; upload each new version from the add-on's existing Developer Hub page.
-
-To share it without a public listing, choose **On your own** instead. Upload the ZIP for signing, then download the signed XPI from the submission page and share or host that file. Firefox still requires Mozilla's signature for regular releases. Increment `version` in `manifest.json` for each release. Mozilla may review submissions, and minified, bundled, or generated code can require a source-code submission; this extension currently ships readable source directly.
+Get it from the store under https://addons.mozilla.org/en-US/firefox/addon/phablens/
